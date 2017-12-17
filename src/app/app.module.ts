@@ -4,6 +4,8 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
 
+import { AuthGuard } from './guards/auth.guard';
+
 // Import containers
 import {
   FullLayoutComponent,
@@ -82,7 +84,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
   providers: [{
     provide: LocationStrategy,
     useClass: HashLocationStrategy
-  }],
+  },AuthGuard],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
