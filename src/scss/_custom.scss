@@ -1,1 +1,11 @@
 // Here you can add other styles
+
+.red-border-class{
+
+    color: rgba(216, 32, 63, 0.25);
+    background-color: #fff;
+    border-color: rgba(216, 32, 63, 0.50);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(216, 32, 63, 0.25);
+
+}
