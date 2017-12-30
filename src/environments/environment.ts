@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  TMSAPI:'http://localhost:3000',
+  TMSAPI:'http://localhost:3000/api',
 };
