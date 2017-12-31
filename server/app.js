@@ -56,39 +56,13 @@ app.use(function (req, res, next) {
 });
 
 
-// =======================
-// routes ================
-// =======================
-// basic route
-app.get('/', function (req, res) {
-    res.send('Hello! The API is at http://localhost:' + port + '/api');
-});
 
 // API ROUTES -------------------
 
 // get an instance of the router for api routes
 var apiRoutes = express.Router();
 
-// TODO: route to authenticate a user (POST http://localhost:8080/api/authenticate)
-
-// TODO: route middleware to verify a token
-
-// route to show a random message (GET http://localhost:8080/api/)
-apiRoutes.get('/', function (req, res) {
-    res.json({ message: 'Welcome to the coolest API on earth!' });
-});
-
-// route to return all users (GET http://localhost:8080/api/users)
-apiRoutes.get('/users', function (req, res) {
-
-    let sql = `select * from users`;
-    let query = db.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
-
-
+// Authenticate user and generate token
 apiRoutes.post('/authenticate', (req, res) => {
 
     let sql = `select * from users where username='${req.body.username}' AND password = '${req.body.password}'`;
@@ -129,6 +103,57 @@ apiRoutes.post('/authenticate', (req, res) => {
         }
     })
 });
+
+
+
+// route middleware to verify a token
+apiRoutes.use(function(req, res, next) {
+
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  
+    // decode token
+    if (token) {
+  
+      // verifies secret and checks exp
+      jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+        if (err) {
+          return res.json({ success: false, message: 'Failed to authenticate token.' });    
+        } else {
+          // if everything is good, save to request for use in other routes
+          req.decoded = decoded;    
+          next();
+        }
+      });
+  
+    } else {
+  
+      // if there is no token
+      // return an error
+      return res.status(403).send({ 
+          success: false, 
+          message: 'No token provided.' 
+      });
+  
+    }
+  });
+ 
+// route to show a random message (GET http://localhost:8080/api/)
+apiRoutes.get('/', function (req, res) {
+    res.json({ message: 'Welcome to the coolest API on earth!' });
+});
+
+// route to return all users (GET http://localhost:8080/api/users)
+apiRoutes.get('/users', function (req, res) {
+
+    let sql = `select * from users`;
+    let query = db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+
 
 
 // apply the routes to our application with the prefix /api
