@@ -16,10 +16,14 @@ export class AuthenticationService {
     }
  
     login(post): Observable<boolean> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         let options = new RequestOptions({ headers: headers });
 
-        return this.http.post(environment.TMSAPI + '/authenticate', post, options)
+        let body = new URLSearchParams();
+        body.set('username', post.username);
+        body.set('password', post.password);
+
+        return this.http.post(environment.TMSAPI + '/authenticate', body.toString(), options)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let token = response.json() && response.json().token;
