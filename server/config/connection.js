@@ -3,7 +3,7 @@ const development = {
   username: 'root',
   password: 'password',
   host: 'localhost',
-  dialect: 'sqlite' || 'mysql' || 'postgres',
+  dialect: 'mysql' || 'sqlite' || 'postgres',
 };
 
 const testing = {
@@ -11,7 +11,7 @@ const testing = {
   username: 'root',
   password: 'password',
   host: 'localhost',
-  dialect: 'sqlite' || 'mysql' || 'postgres',
+  dialect: 'mysql' || 'sqlite' || 'postgres',
 };
 
 const production = {
